@@ -791,8 +791,8 @@
       alert('Zəhmət olmasa ad və telefon nömrəsini daxil edin.');
       return;
     }
-    if (!selectedPackage) {
-  selectedPackage = { duration: '1 aylıq giriş', price: 10, isPremium: false };
+ if (!selectedPackage) {
+  selectedPackage = { duration: document.getElementById('selected-pkg-info').textContent.replace('✅ Seçdiyiniz paket: ', '').split(' — ')[0], price: 0, isPremium: false };
 }
 
     const file = document.getElementById('screenshot').files[0];
