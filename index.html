@@ -792,9 +792,8 @@
       return;
     }
     if (!selectedPackage) {
-      alert('Zəhmət olmasa paket seçin.');
-      return;
-    }
+  selectedPackage = { duration: '1 aylıq giriş', price: 10, isPremium: false };
+}
 
     const file = document.getElementById('screenshot').files[0];
 
