@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sağlam Qida — Pulsuz Dərslər</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #f9f4ee;
+    --warm: #f2e8d9;
+    --green: #3a6b4a;
+    --green-light: #5a8f6a;
+    --green-pale: #e8f0ea;
+    --brown: #7a5c3a;
+    --dark: #1e2a1e;
+    --text: #2d3a2d;
+    --muted: #7a8a7a;
+    --accent: #c8622a;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--text);
+    overflow-x: hidden;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 60px 24px;
+    position: relative;
+    background:
+      radial-gradient(ellipse at 20% 50%, rgba(58,107,74,0.08) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 20%, rgba(200,98,42,0.06) 0%, transparent 50%),
+      var(--cream);
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-image:
+      radial-gradient(circle, rgba(58,107,74,0.15) 1px, transparent 1px);
+    background-size: 40px 40px;
+    opacity: 0.4;
+    pointer-events: none;
+  }
+
+  .badge {
+    display: inline-block;
+    background: var(--green-pale);
+    color: var(--green);
+    border: 1px solid rgba(58,107,74,0.2);
+    border-radius: 100px;
+    padding: 6px 18px;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    margin-bottom: 28px;
+    animation: fadeUp 0.6s ease both;
+  }
+
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(36px, 6vw, 72px);
+    font-weight: 700;
+    line-height: 1.1;
+    color: var(--dark);
+    max-width: 800px;
+    margin-bottom: 20px;
+    animation: fadeUp 0.6s 0.1s ease both;
+  }
+
+  .hero h1 em {
+    font-style: italic;
+    color: var(--green);
+  }
+
+  .hero p {
+    font-size: 18px;
+    color: var(--muted);
+    max-width: 500px;
+    line-height: 1.7;
+    margin-bottom: 48px;
+    font-weight: 300;
+    animation: fadeUp 0.6s 0.2s ease both;
+  }
+
+  .scroll-hint {
+    position: absolute;
+    bottom: 32px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    color: var(--muted);
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    animation: fadeUp 0.6s 0.5s ease both;
+  }
+
+  .scroll-hint .arrow {
+    width: 1px;
+    height: 40px;
+    background: linear-gradient(to bottom, var(--muted), transparent);
+    animation: scrollPulse 2s infinite;
+  }
+
+  /* ── LESSON SECTION ── */
+  .section {
+    padding: 80px 24px;
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+
+  .section-label {
+    font-size: 12px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--green);
+    font-weight: 500;
+    margin-bottom: 12px;
+  }
+
+  .section h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(28px, 4vw, 48px);
+    color: var(--dark);
+    margin-bottom: 48px;
+    line-height: 1.2;
+  }
+
+  /* ── LESSON CARDS ── */
+  .lessons-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    margin-bottom: 60px;
+  }
+
+  .lesson-card {
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    border: 1px solid rgba(0,0,0,0.06);
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+  }
+
+  .lesson-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+  }
+
+  .lesson-card.selected {
+    border-color: var(--green);
+    box-shadow: 0 0 0 2px var(--green);
+  }
+
+  .lesson-card.locked {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  .card-top {
+    background: var(--green-pale);
+    padding: 32px;
+    font-size: 48px;
+    text-align: center;
+  }
+
+  .card-body {
+    padding: 24px;
+  }
+
+  .card-body h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    color: var(--dark);
+    margin-bottom: 8px;
+  }
+
+  .card-body p {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  .card-select {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 16px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--green);
+  }
+
+  .card-select .check {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 2px solid var(--green);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+  }
+
+  .lesson-card.selected .check {
+    background: var(--green);
+    color: white;
+  }
+
+  /* ── VIDEO PLAYER ── */
+  .video-section {
+    display: none;
+    animation: fadeUp 0.5s ease;
+  }
+
+  .video-section.visible { display: block; }
+
+  .video-wrapper {
+    background: var(--dark);
+    border-radius: 20px;
+    overflow: hidden;
+    aspect-ratio: 16/9;
+    margin-bottom: 28px;
+    position: relative;
+  }
+
+  .video-wrapper iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+
+  .watched-btn {
+    display: block;
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto 60px;
+    padding: 18px;
+    background: var(--green);
+    color: white;
+    border: none;
+    border-radius: 14px;
+    font-size: 16px;
+    font-weight: 500;
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.2s;
+  }
+
+  .watched-btn:hover {
+    background: var(--green-light);
+    transform: translateY(-2px);
+  }
+
+  /* ── PACKAGES ── */
+  .packages-section {
+    display: none;
+    animation: fadeUp 0.5s ease;
+  }
+
+  .packages-section.visible { display: block; }
+
+  .packages-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-bottom: 48px;
+  }
+
+  .pkg-card {
+    background: white;
+    border: 2px solid rgba(0,0,0,0.08);
+    border-radius: 20px;
+    padding: 28px 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+  }
+
+  .pkg-card:hover {
+    border-color: var(--green);
+    transform: translateY(-3px);
+  }
+
+  .pkg-card.premium {
+    background: linear-gradient(135deg, var(--green-pale), white);
+    border-color: var(--green);
+  }
+
+  .pkg-badge {
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--green);
+    color: white;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 4px 14px;
+    border-radius: 100px;
+    white-space: nowrap;
+  }
+
+  .pkg-duration {
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+
+  .pkg-price {
+    font-family: 'Playfair Display', serif;
+    font-size: 36px;
+    color: var(--dark);
+    font-weight: 700;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .pkg-currency {
+    font-size: 14px;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+
+  .pkg-feature {
+    font-size: 12px;
+    color: var(--green);
+    background: var(--green-pale);
+    padding: 4px 10px;
+    border-radius: 100px;
+    display: inline-block;
+  }
+
+  /* ── FORM ── */
+  .form-section {
+    display: none;
+    animation: fadeUp 0.5s ease;
+  }
+
+  .form-section.visible { display: block; }
+
+  .form-box {
+    background: white;
+    border-radius: 24px;
+    padding: 48px;
+    border: 1px solid rgba(0,0,0,0.06);
+    max-width: 560px;
+    margin: 0 auto;
+  }
+
+  .form-box h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    color: var(--dark);
+    margin-bottom: 8px;
+  }
+
+  .form-box p {
+    color: var(--muted);
+    font-size: 15px;
+    margin-bottom: 32px;
+    line-height: 1.6;
+  }
+
+  .selected-pkg-info {
+    background: var(--green-pale);
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin-bottom: 24px;
+    font-size: 15px;
+    color: var(--green);
+    font-weight: 500;
+  }
+
+  .form-group {
+    margin-bottom: 20px;
+  }
+
+  .form-group label {
+    display: block;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 8px;
+    letter-spacing: 0.02em;
+  }
+
+  .form-group input {
+    width: 100%;
+    padding: 14px 18px;
+    border: 1.5px solid rgba(0,0,0,0.12);
+    border-radius: 12px;
+    font-size: 16px;
+    font-family: 'DM Sans', sans-serif;
+    color: var(--text);
+    background: var(--cream);
+    transition: border-color 0.2s;
+    outline: none;
+  }
+
+  .form-group input:focus {
+    border-color: var(--green);
+    background: white;
+  }
+
+  .payment-info {
+    background: var(--warm);
+    border-radius: 14px;
+    padding: 20px;
+    margin-bottom: 24px;
+    font-size: 14px;
+    line-height: 1.8;
+    color: var(--text);
+  }
+
+  .payment-info strong {
+    color: var(--brown);
+  }
+
+  .submit-btn {
+    width: 100%;
+    padding: 18px;
+    background: var(--green);
+    color: white;
+    border: none;
+    border-radius: 14px;
+    font-size: 16px;
+    font-weight: 500;
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.2s;
+  }
+
+  .submit-btn:hover {
+    background: var(--green-light);
+    transform: translateY(-2px);
+  }
+
+  /* screenshot upload */
+  .upload-area {
+    border: 2px dashed rgba(0,0,0,0.15);
+    border-radius: 14px;
+    padding: 32px;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+    margin-bottom: 20px;
+    position: relative;
+  }
+
+  .upload-area:hover, .upload-area.dragover {
+    border-color: var(--green);
+    background: var(--green-pale);
+  }
+
+  .upload-area input[type=file] {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+  }
+
+  .upload-area .upload-icon { font-size: 32px; margin-bottom: 8px; }
+  .upload-area p { font-size: 14px; color: var(--muted); }
+  .upload-area .file-name { font-size: 13px; color: var(--green); margin-top: 8px; font-weight: 500; }
+
+  /* ── SUCCESS ── */
+  .success-section {
+    display: none;
+    text-align: center;
+    padding: 80px 24px;
+    animation: fadeUp 0.5s ease;
+  }
+
+  .success-section.visible { display: block; }
+
+  .success-icon { font-size: 64px; margin-bottom: 24px; }
+
+  .success-section h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 36px;
+    color: var(--dark);
+    margin-bottom: 16px;
+  }
+
+  .success-section p {
+    color: var(--muted);
+    font-size: 16px;
+    max-width: 400px;
+    margin: 0 auto;
+    line-height: 1.7;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    text-align: center;
+    padding: 40px 24px;
+    color: var(--muted);
+    font-size: 13px;
+    border-top: 1px solid rgba(0,0,0,0.06);
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes scrollPulse {
+    0%, 100% { opacity: 0.4; }
+    50% { opacity: 1; }
+  }
+
+  /* ── MOBILE ── */
+  @media (max-width: 600px) {
+    .form-box { padding: 28px 20px; }
+    .packages-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+<!-- Netlify form detection -->
+<form name="order" netlify netlify-honeypot="bot-field" hidden enctype="multipart/form-data">
+  <input name="name">
+  <input name="phone">
+  <input name="telegram">
+  <input name="lesson">
+  <input name="package">
+  <input name="price">
+  <input type="file" name="screenshot">
+</form>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="badge">🌿 Nütrisioloq | Sağlam Qida</div>
+  <h1>Düzgün qidalanmaq <em>çətin deyil</em></h1>
+  <p>Pulsuz dərslərə baxın, öyrənin və sağlamlığınıza ilk addımı atın.</p>
+  <div class="scroll-hint">
+    <span>AŞAĞI BAXIN</span>
+    <div class="arrow"></div>
+  </div>
+</section>
+
+<!-- LESSONS -->
+<div class="section" id="lessons-section">
+  <div class="section-label">Pulsuz dərslər</div>
+  <h2>Hansı dərsi izləmək istərsiniz?</h2>
+
+  <div class="lessons-grid">
+    <div class="lesson-card" onclick="selectLesson('protein', this)">
+      <div class="card-top">🥚</div>
+      <div class="card-body">
+        <h3>Zülal norması</h3>
+        <p>Gündəlik zülal qəbulunuz nə qədər olmalıdır? Elmi əsaslarla izah edirik.</p>
+        <div class="card-select">
+          <div class="check">✓</div>
+          <span>Bu dərsi seçin</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="lesson-card" onclick="selectLesson('oils', this)">
+      <div class="card-top">🫒</div>
+      <div class="card-body">
+        <h3>Yağlar reytinqi</h3>
+        <p>Hansı yağları daha çox qəbul etməlisiniz, hansıları isə məhdudlaşdırmaq lazımdır? Bu videodan sonra başa düşəcəksiniz.</p>
+        <div class="card-select">
+          <div class="check">✓</div>
+          <span>Bu dərsi seçin</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="lesson-card" onclick="selectLesson('recipe', this)">
+      <div class="card-top">🥗</div>
+      <div class="card-body">
+        <h3>Sağlam resept</h3>
+        <p>Dadlı, sağlam və hazırlanması asan bir resept sizinlə paylaşırıq.</p>
+        <div class="card-select">
+          <div class="check">✓</div>
+          <span>Bu dərsi seçin</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VIDEO -->
+  <div class="video-section" id="video-section">
+    <div class="video-wrapper">
+      <iframe id="lesson-iframe" allowfullscreen
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        referrerpolicy="strict-origin-when-cross-origin">
+      </iframe>
+    </div>
+    <button class="watched-btn" onclick="showPackages()">✅ Dərsə baxdım — davam edin</button>
+  </div>
+</div>
+
+<!-- PACKAGES -->
+<div class="section packages-section" id="packages-section">
+  <div class="section-label">Bütün dərslər</div>
+  <h2>Bütün dərslərə giriş əldə edin</h2>
+
+  <div class="packages-grid">
+    <div class="pkg-card" onclick="selectPackage('1 aylıq giriş', 10, false, this)">
+      <div class="pkg-duration">1 ay</div>
+      <div class="pkg-price">10</div>
+      <div class="pkg-currency">AZN</div>
+    </div>
+
+    <div class="pkg-card" onclick="selectPackage('3 aylıq giriş', 25, false, this)">
+      <div class="pkg-duration">3 ay</div>
+      <div class="pkg-price">25</div>
+      <div class="pkg-currency">AZN</div>
+    </div>
+
+    <div class="pkg-card premium" onclick="selectPackage('6 aylıq giriş', 45, true, this)">
+      <div class="pkg-badge">⭐️ Populyar</div>
+      <div class="pkg-duration">6 ay</div>
+      <div class="pkg-price">45</div>
+      <div class="pkg-currency">AZN</div>
+      <div class="pkg-feature">+ Yeni dərslər 🎁</div>
+    </div>
+
+    <div class="pkg-card premium" onclick="selectPackage('1 illik giriş', 60, true, this)">
+      <div class="pkg-badge">🏆 Ən yaxşı dəyər</div>
+      <div class="pkg-duration">1 il</div>
+      <div class="pkg-price">60</div>
+      <div class="pkg-currency">AZN</div>
+      <div class="pkg-feature">+ Yeni dərslər 🎁</div>
+    </div>
+  </div>
+</div>
+
+<!-- FORM -->
+<div class="section form-section" id="form-section">
+  <div class="form-box">
+    <h3>Məlumatlarınızı daxil edin</h3>
+    <p>Ödənişdən sonra sizinlə əlaqə saxlayacağıq və kanala girişinizi açacağıq.</p>
+
+    <div class="selected-pkg-info" id="selected-pkg-info"></div>
+
+    <div class="form-group">
+      <label>Ad və Soyad</label>
+      <input type="text" id="name" placeholder="Adınızı daxil edin" required>
+    </div>
+
+    <div class="form-group">
+      <label>Telefon nömrəsi</label>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <span style="padding:14px 16px;background:var(--green-pale);border:1.5px solid rgba(0,0,0,0.12);border-radius:12px;font-size:16px;color:var(--text);white-space:nowrap;font-family:'DM Sans',sans-serif;">+994</span>
+        <input type="tel" id="phone" placeholder="50 123 45 67" required
+          style="flex:1;"
+          oninput="this.value=this.value.replace(/[^0-9 ]/g,'')">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Telegram username (əgər varsa)</label>
+      <input type="text" id="telegram" placeholder="@username">
+    </div>
+
+    <div class="payment-info">
+      <strong>💳 Ödəniş rekvizitləri:</strong><br>
+      Kart: 4169 7388 5948 0232<br>
+      <br>
+      Ödənişdən sonra skrinşotu aşağıya yükləyin 👇
+    </div>
+
+    <div class="upload-area" id="upload-area">
+      <input type="file" id="screenshot" accept="image/*" onchange="handleFile(this)">
+      <div class="upload-icon">📎</div>
+      <p>Ödəniş skrinşotunu bura yükləyin</p>
+      <div class="file-name" id="file-name"></div>
+    </div>
+
+    <button class="submit-btn" onclick="submitForm()">Göndər və girişi aktivləşdir →</button>
+  </div>
+</div>
+
+<!-- SUCCESS -->
+<div class="success-section" id="success-section">
+  <div class="success-icon">🎉</div>
+  <h2>Təşəkkür edirik!</h2>
+  <p>Məlumatlarınız qəbul edildi. Ödənişiniz yoxlandıqdan sonra sizinlə əlaqə saxlayacağıq və kanala girişinizi açacağıq.</p>
+</div>
+
+<footer>
+  © 2025 Sağlam Qida · Bütün hüquqlar qorunur
+</footer>
+
+<script>
+  const VIDEOS = {
+    protein: 'https://www.youtube.com/embed/qlwpu8n0KRk?rel=0&modestbranding=1',
+    oils:    'https://www.youtube.com/embed/mYTVKGgB6kc?rel=0&modestbranding=1',
+    recipe:  'https://www.youtube.com/embed/Vtn_qAg7K9c?rel=0&modestbranding=1',
+  };
+
+  // Telegram bot webhook URL — replace with your actual endpoint
+  const WEBHOOK_URL = 'https://saglamqida-bot-production.up.railway.app/order';
+
+  let selectedLesson = null;
+  let selectedPackage = null;
+  let lessonLocked = false;
+
+  function selectLesson(key, card) {
+    if (lessonLocked) return;
+    lessonLocked = true;
+
+    // lock other cards
+    document.querySelectorAll('.lesson-card').forEach(c => {
+      if (c !== card) c.classList.add('locked');
+    });
+    card.classList.add('selected');
+    selectedLesson = key;
+
+    // show video
+    document.getElementById('lesson-iframe').src = VIDEOS[key];
+    const vs = document.getElementById('video-section');
+    vs.classList.add('visible');
+    setTimeout(() => vs.scrollIntoView({ behavior: 'smooth', block: 'center' }), 100);
+  }
+
+  function showPackages() {
+    const ps = document.getElementById('packages-section');
+    ps.classList.add('visible');
+    setTimeout(() => ps.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
+  }
+
+  function selectPackage(duration, price, isPremium, card) {
+    document.querySelectorAll('.pkg-card').forEach(c => c.style.borderColor = '');
+    card.style.borderColor = 'var(--green)';
+    card.style.boxShadow = '0 0 0 2px var(--green)';
+    selectedPackage = { duration, price, isPremium };
+
+    document.getElementById('selected-pkg-info').textContent =
+      `✅ Seçdiyiniz paket: ${duration} — ${price} AZN`;
+
+    const fs = document.getElementById('form-section');
+    fs.classList.add('visible');
+    setTimeout(() => fs.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
+  }
+
+  function handleFile(input) {
+    const file = input.files[0];
+    if (file) {
+      document.getElementById('file-name').textContent = '✓ ' + file.name;
+      document.getElementById('upload-area').style.borderColor = 'var(--green)';
+    }
+  }
+
+  // drag and drop
+  const ua = document.getElementById('upload-area');
+  ua.addEventListener('dragover', e => { e.preventDefault(); ua.classList.add('dragover'); });
+  ua.addEventListener('dragleave', () => ua.classList.remove('dragover'));
+  ua.addEventListener('drop', e => {
+    e.preventDefault();
+    ua.classList.remove('dragover');
+    const file = e.dataTransfer.files[0];
+    if (file) {
+      document.getElementById('screenshot').files = e.dataTransfer.files;
+      document.getElementById('file-name').textContent = '✓ ' + file.name;
+      ua.style.borderColor = 'var(--green)';
+    }
+  });
+
+  async function submitForm() {
+    const name     = document.getElementById('name').value.trim();
+    const phone    = '+994 ' + document.getElementById('phone').value.trim();
+    const telegram = document.getElementById('telegram').value.trim();
+    if (!name || !phone) {
+      alert('Zəhmət olmasa ad və telefon nömrəsini daxil edin.');
+      return;
+    }
+    if (!selectedPackage) {
+      alert('Zəhmət olmasa paket seçin.');
+      return;
+    }
+
+    const file = document.getElementById('screenshot').files[0];
+
+    const formData = new FormData();
+    formData.append('name', name);
+    formData.append('phone', phone);
+    formData.append('telegram', telegram);
+    formData.append('lesson', selectedLesson);
+    formData.append('package', selectedPackage.duration);
+    formData.append('price', selectedPackage.price + ' AZN');
+    if (file) formData.append('screenshot', file);
+
+    try {
+      await fetch(WEBHOOK_URL, { method: 'POST', body: formData });
+    } catch(e) {}
+
+    document.getElementById('form-section').classList.remove('visible');
+    const ss = document.getElementById('success-section');
+    ss.classList.add('visible');
+    ss.scrollIntoView({ behavior: 'smooth' });
+  }
+</script>
+</body>
+</html>
