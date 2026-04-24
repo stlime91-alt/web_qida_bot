@@ -808,8 +808,14 @@
     if (file) formData.append('screenshot', file);
 
     try {
-      await fetch(WEBHOOK_URL, { method: 'POST', body: formData });
-    } catch(e) {}
+      await fetch(WEBHOOK_URL, {
+        method: 'POST',
+        body: formData,
+        mode: 'no-cors'
+      });
+    } catch(e) {
+      console.log('fetch error:', e);
+    }
 
     document.getElementById('form-section').classList.remove('visible');
     const ss = document.getElementById('success-section');
