@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sağlam Qida — Pulsuz Dərslər</title>
+<title>Sağlam Qida — Ödənişsiz Dərslər</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -32,16 +32,84 @@
   .hero {
     min-height: 100vh;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
     justify-content: center;
-    text-align: center;
-    padding: 60px 24px;
+    gap: 60px;
+    text-align: left;
+    padding: 80px 60px;
     position: relative;
     background:
       radial-gradient(ellipse at 20% 50%, rgba(58,107,74,0.08) 0%, transparent 60%),
       radial-gradient(ellipse at 80% 20%, rgba(200,98,42,0.06) 0%, transparent 50%),
       var(--cream);
+  }
+
+  .hero-content {
+    flex: 1;
+    max-width: 500px;
+  }
+
+  .hero-photo-wrap {
+    flex-shrink: 0;
+    width: 420px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .hero-photo {
+    width: 100%;
+    height: 480px;
+    border-radius: 32px;
+    overflow: hidden;
+    box-shadow: 0 24px 80px rgba(0,0,0,0.15);
+  }
+
+  .hero-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+  }
+
+  .ig-badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+    color: white;
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 100px;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: 'DM Sans', sans-serif;
+    white-space: nowrap;
+    box-shadow: 0 4px 20px rgba(220,39,67,0.35);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .ig-badge:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 28px rgba(220,39,67,0.45);
+  }
+
+  @media (max-width: 900px) {
+    .hero {
+      flex-direction: column;
+      text-align: center;
+      padding: 80px 24px 60px;
+      gap: 40px;
+    }
+    .hero-photo-wrap {
+      width: 100%;
+      max-width: 380px;
+    }
+    .hero-photo {
+      height: 340px;
+    }
   }
 
   .hero::before {
@@ -71,11 +139,10 @@
 
   .hero h1 {
     font-family: 'Playfair Display', serif;
-    font-size: clamp(36px, 6vw, 72px);
+    font-size: clamp(32px, 4vw, 60px);
     font-weight: 700;
     line-height: 1.1;
     color: var(--dark);
-    max-width: 800px;
     margin-bottom: 20px;
     animation: fadeUp 0.6s 0.1s ease both;
   }
@@ -88,9 +155,8 @@
   .hero p {
     font-size: 18px;
     color: var(--muted);
-    max-width: 500px;
     line-height: 1.7;
-    margin-bottom: 48px;
+    margin-bottom: 0;
     font-weight: 300;
     animation: fadeUp 0.6s 0.2s ease both;
   }
@@ -226,19 +292,49 @@
   }
 
   /* ── VIDEO PLAYER ── */
-  .video-section {
+  .video-modal {
     display: none;
-    animation: fadeUp 0.5s ease;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.8);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    backdrop-filter: blur(4px);
   }
 
-  .video-section.visible { display: block; }
+  .video-modal-inner {
+    background: var(--dark);
+    border-radius: 20px;
+    width: 100%;
+    max-width: 800px;
+    position: relative;
+    overflow: hidden;
+    animation: fadeIn 0.25s ease;
+  }
+
+  .modal-close {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: rgba(255,255,255,0.15);
+    color: white;
+    border: none;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    font-size: 16px;
+    cursor: pointer;
+    z-index: 10;
+    transition: background 0.2s;
+  }
+
+  .modal-close:hover { background: rgba(255,255,255,0.3); }
 
   .video-wrapper {
     background: var(--dark);
-    border-radius: 20px;
-    overflow: hidden;
     aspect-ratio: 16/9;
-    margin-bottom: 28px;
     position: relative;
   }
 
@@ -246,6 +342,12 @@
     width: 100%;
     height: 100%;
     border: none;
+    display: block;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.95); }
+    to   { opacity: 1; transform: scale(1); }
   }
 
   .watched-btn {
@@ -530,6 +632,247 @@
     50% { opacity: 1; }
   }
 
+  .course-list {
+    margin-top: 40px;
+  }
+
+  .course-items {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+
+  /* ── Locked course items — muted, no color ── */
+  .course-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    background: #f5f5f3;
+    border-radius: 16px;
+    padding: 20px;
+    border: 1px solid rgba(0,0,0,0.06);
+    transition: all 0.25s ease;
+    cursor: default;
+  }
+
+  .course-item.locked:hover {
+    background: #eef0ee;
+    border-color: rgba(0,0,0,0.12);
+  }
+
+  .course-item.locked:hover .course-title {
+    color: var(--muted);
+  }
+
+  .course-item.locked:hover .course-desc {
+    color: var(--muted);
+  }
+
+  .course-item.locked:hover .course-num {
+    background: #d8dcd8;
+    color: #7a8a7a;
+  }
+
+  /* ── Open course items — vibrant, stand out ── */
+  .course-item.open {
+    opacity: 1;
+    filter: none;
+    background: white;
+    border: 2px solid var(--green);
+    box-shadow: 0 4px 20px rgba(58,107,74,0.12);
+  }
+
+  .course-item.open.theory {
+    border-color: #5b8fa8;
+    box-shadow: 0 4px 20px rgba(91,143,168,0.15);
+  }
+
+  .course-item.open.practical {
+    border-color: var(--green);
+    box-shadow: 0 4px 20px rgba(58,107,74,0.15);
+  }
+
+  .course-num {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #e8e8e8;
+    color: #c0c8c0;
+    font-weight: 600;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .course-item.open.theory .course-num {
+    background: #5b8fa8;
+    color: white;
+  }
+
+  .course-item.open.practical .course-num {
+    background: var(--green);
+    color: white;
+  }
+
+  .course-info {
+    flex: 1;
+  }
+
+  .course-title {
+    font-weight: 500;
+    font-size: 15px;
+    color: #b0b8b0;
+    margin-bottom: 4px;
+  }
+
+  .course-item.open .course-title {
+    color: var(--dark);
+  }
+
+  .course-desc {
+    font-size: 13px;
+    color: #c8cfc8;
+    line-height: 1.5;
+  }
+
+  .course-item.open .course-desc {
+    color: var(--muted);
+  }
+
+  .free-badge {
+    background: var(--green);
+    color: white;
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 100px;
+    font-weight: 500;
+    margin-left: 6px;
+    vertical-align: middle;
+  }
+
+  .course-cta {
+    background: var(--green);
+    color: white;
+    text-decoration: none;
+    padding: 8px 14px;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: 500;
+    white-space: nowrap;
+    flex-shrink: 0;
+    cursor: pointer;
+    transition: background 0.2s;
+    opacity: 1;
+  }
+
+  .course-cta:hover {
+    background: var(--green-light);
+  }
+
+  .type-badge {
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 100px;
+    font-weight: 500;
+    margin-left: 4px;
+    vertical-align: middle;
+  }
+
+  .theory-badge {
+    background: #5b8fa8;
+    color: white;
+  }
+
+  .practical-badge {
+    background: var(--green);
+    color: white;
+  }
+
+  .pkg-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--dark);
+    margin-bottom: 8px;
+  }
+
+  .pkg-perks {
+    list-style: none;
+    margin-top: 12px;
+    text-align: left;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .pkg-perks li {
+    font-size: 12px;
+    color: var(--text);
+    line-height: 1.4;
+  }
+
+  /* ── VIP card with gold accents ── */
+  .pkg-card.vip {
+    background: linear-gradient(145deg, #fdf6e3 0%, #fff8e1 100%);
+    border: 2px solid #d4a437;
+    box-shadow: 0 8px 32px rgba(212,164,55,0.18);
+  }
+
+  .pkg-card.vip:hover {
+    border-color: #b8902e;
+    box-shadow: 0 12px 40px rgba(212,164,55,0.28);
+  }
+
+  .vip-badge {
+    background: linear-gradient(135deg, #d4a437, #b8902e) !important;
+    color: white !important;
+    box-shadow: 0 4px 12px rgba(212,164,55,0.4);
+  }
+
+  .pkg-card.vip .pkg-name {
+    background: linear-gradient(135deg, #b8902e, #d4a437);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .vip-divider {
+    margin-top: 16px;
+    padding-top: 12px;
+    border-top: 1px dashed #d4a437;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #b8902e;
+    font-weight: 600;
+    text-align: center;
+  }
+
+  .vip-perks {
+    list-style: none;
+    padding: 0;
+    margin: 12px 0 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .vip-perks li {
+    font-size: 13px;
+    color: var(--dark);
+    line-height: 1.4;
+    background: linear-gradient(145deg, rgba(212,164,55,0.12), rgba(212,164,55,0.05));
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: 1px solid rgba(212,164,55,0.3);
+    text-align: left;
+    font-weight: 500;
+  }
+
   /* ── MOBILE ── */
   @media (max-width: 600px) {
     .form-box { padding: 28px 20px; }
@@ -551,9 +894,22 @@
 
 <!-- HERO -->
 <section class="hero">
-  <div class="badge">🌿 Nütrisioloq | Sağlam Qida</div>
-  <h1>Düzgün qidalanmaq <em>çətin deyil</em></h1>
-  <p>Pulsuz dərslərə baxın, öyrənin və sağlamlığınıza ilk addımı atın.</p>
+  <div class="hero-content">
+    <div class="badge">🌿 Nütrisioloq | Sağlam Qida</div>
+    <h1>Düzgün qidalanmaq <em>çətin deyil</em></h1>
+    <p>Ödənişsiz dərslərə baxın, öyrənin və sağlamlığınıza ilk addımı atın.</p>
+  </div>
+  <div class="hero-photo-wrap">
+    <div class="hero-photo">
+      <img src="photo.png" alt="Nütrisioloq" />
+    </div>
+    <a href="https://instagram.com/emil.saglam" target="_blank" class="ig-badge">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+      </svg>
+      @emil.saglam
+    </a>
+  </div>
   <div class="scroll-hint">
     <span>AŞAĞI BAXIN</span>
     <div class="arrow"></div>
@@ -562,56 +918,148 @@
 
 <!-- LESSONS -->
 <div class="section" id="lessons-section">
-  <div class="section-label">Pulsuz dərslər</div>
-  <h2>Hansı dərsi izləmək istərsiniz?</h2>
+  <div class="section-label">Ödənişsiz dərslər</div>
+  <h2>Proqrama nəzər salın</h2>
 
-  <div class="lessons-grid">
-    <div class="lesson-card" onclick="selectLesson('protein', this)">
-      <div class="card-top">🥚</div>
-      <div class="card-body">
-        <h3>Zülal norması</h3>
-        <p>Gündəlik zülal qəbulunuz nə qədər olmalıdır? Elmi əsaslarla izah edirik.</p>
-        <div class="card-select">
-          <div class="check">✓</div>
-          <span>Bu dərsi seçin</span>
-        </div>
-      </div>
-    </div>
+  <!-- Full course list shown immediately -->
+  <div class="course-list" id="course-list">
+    <div class="course-items">
 
-    <div class="lesson-card" onclick="selectLesson('oils', this)">
-      <div class="card-top">🫒</div>
-      <div class="card-body">
-        <h3>Yağlar reytinqi</h3>
-        <p>Hansı yağları daha çox qəbul etməlisiniz, hansıları isə məhdudlaşdırmaq lazımdır? Bu videodan sonra başa düşəcəksiniz.</p>
-        <div class="card-select">
-          <div class="check">✓</div>
-          <span>Bu dərsi seçin</span>
+      <div class="course-item locked theory">
+        <div class="course-num">1</div>
+        <div class="course-info">
+          <div class="course-title">🔒 Giriş dərsi <span class="type-badge theory-badge">Nəzəri</span></div>
+          <div class="course-desc">Burada təlimin özündə danışacağımız əsas məqamlarla tanış oluruq.</div>
         </div>
+        <a class="course-cta" onclick="document.getElementById('packages-section').classList.add('visible'); setTimeout(()=>document.getElementById('packages-section').scrollIntoView({behavior:'smooth'}), 50);">Giriş əldə et →</a>
       </div>
-    </div>
 
-    <div class="lesson-card" onclick="selectLesson('recipe', this)">
-      <div class="card-top">🥗</div>
-      <div class="card-body">
-        <h3>Sağlam resept</h3>
-        <p>Dadlı, sağlam və hazırlanması asan bir resept sizinlə paylaşırıq.</p>
-        <div class="card-select">
-          <div class="check">✓</div>
-          <span>Bu dərsi seçin</span>
+      <div class="course-item locked theory">
+        <div class="course-num">2</div>
+        <div class="course-info">
+          <div class="course-title">🔒 Dərs 2 — Kalori <span class="type-badge theory-badge">Nəzəri</span></div>
+          <div class="course-desc">Kalori nədir? Makronutrientlərin enerji dəyəri: zülal, yağ və karbohidratda neçə kkal var?</div>
         </div>
+        <a class="course-cta" onclick="document.getElementById('packages-section').classList.add('visible'); setTimeout(()=>document.getElementById('packages-section').scrollIntoView({behavior:'smooth'}), 50);">Giriş əldə et →</a>
       </div>
+
+      <div class="course-item locked theory">
+        <div class="course-num">3</div>
+        <div class="course-info">
+          <div class="course-title">🔒 Dərs 3 — Makronutriyentlər <span class="type-badge theory-badge">Nəzəri</span></div>
+          <div class="course-desc">Zülallar, yağlar, karbohidratlar və onların orqanizmimizdəki rolu.</div>
+        </div>
+        <a class="course-cta" onclick="document.getElementById('packages-section').classList.add('visible'); setTimeout(()=>document.getElementById('packages-section').scrollIntoView({behavior:'smooth'}), 50);">Giriş əldə et →</a>
+      </div>
+
+      <div class="course-item open theory" onclick="selectLesson('protein', this)" style="cursor:pointer;">
+        <div class="course-num">4</div>
+        <div class="course-info">
+          <div class="course-title">🔓 Dərs 4 — Zülal <span class="type-badge theory-badge">Nəzəri</span> <span class="free-badge">Ödənişsiz</span></div>
+          <div class="course-desc">Nə qədər zülal lazımdır və bu normanı necə toplamaq olar?</div>
+        </div>
+        <a class="course-cta open-cta">İzlə ▶</a>
+      </div>
+
+      <div class="course-item locked theory">
+        <div class="course-num">5</div>
+        <div class="course-info">
+          <div class="course-title">🔒 Dərs 5 — Yağların reytinqi <span class="type-badge theory-badge">Nəzəri</span></div>
+          <div class="course-desc">Heyvani yağları bitki yağları ilə əvəz etmək nə üçün vacibdir? Tüstülənmə temperaturu nədir?</div>
+        </div>
+        <a class="course-cta" onclick="document.getElementById('packages-section').classList.add('visible'); setTimeout(()=>document.getElementById('packages-section').scrollIntoView({behavior:'smooth'}), 50);">Giriş əldə et →</a>
+      </div>
+
+      <div class="course-item locked theory">
+        <div class="course-num">6</div>
+        <div class="course-info">
+          <div class="course-title">🔒 Dərs 6 — Metabolizm hesablaması <span class="type-badge theory-badge">Nəzəri</span></div>
+          <div class="course-desc">Fərdi enerji normasının hesablanması. Niyə 1200 kkal pəhrizlər ziyan vurur?</div>
+        </div>
+        <a class="course-cta" onclick="document.getElementById('packages-section').classList.add('visible'); setTimeout(()=>document.getElementById('packages-section').scrollIntoView({behavior:'smooth'}), 50);">Giriş əldə et →</a>
+      </div>
+
+      <div class="course-item open practical" onclick="selectLesson('recipe', this)" style="cursor:pointer;">
+        <div class="course-num">7</div>
+        <div class="course-info">
+          <div class="course-title">🔓 Dərs 7 — Balanslı dürüm <span class="type-badge practical-badge">Praktiki</span> <span class="free-badge">Ödənişsiz</span></div>
+          <div class="course-desc">Dönər və şaurma sayağı, lif və zülal ilə zəngin bir yemək.</div>
+        </div>
+        <a class="course-cta open-cta">İzlə ▶</a>
+      </div>
+
+      <div class="course-item locked practical">
+        <div class="course-num">8</div>
+        <div class="course-info">
+          <div class="course-title">🔒 Dərs 8 — Harvard Qazan Yeməyi <span class="type-badge practical-badge">Praktiki</span></div>
+          <div class="course-desc">Harvard prinsipi ilə böyük qazanda bişirmək — ailə üçün ideal həll.</div>
+        </div>
+        <a class="course-cta" onclick="document.getElementById('packages-section').classList.add('visible'); setTimeout(()=>document.getElementById('packages-section').scrollIntoView({behavior:'smooth'}), 50);">Giriş əldə et →</a>
+      </div>
+
+      <div class="course-item locked practical">
+        <div class="course-num">9</div>
+        <div class="course-info">
+          <div class="course-title">🔒 Dərs 9 — Balanslı desert <span class="type-badge practical-badge">Praktiki</span></div>
+          <div class="course-desc">Zülal və liflə zəngin desert — özünüzü məhdudlaşdırmayın!</div>
+        </div>
+        <a class="course-cta" onclick="document.getElementById('packages-section').classList.add('visible'); setTimeout(()=>document.getElementById('packages-section').scrollIntoView({behavior:'smooth'}), 50);">Giriş əldə et →</a>
+      </div>
+
+      <div class="course-item locked practical">
+        <div class="course-num">10</div>
+        <div class="course-info">
+          <div class="course-title">🔒 Dərs 10 — Qonaqlıqda ənənəvi yeməklər <span class="type-badge practical-badge">Praktiki</span></div>
+          <div class="course-desc">Qonaqlığa gedəndə ənənəvi yeməkləri necə düzgün yemək haqqında.</div>
+        </div>
+        <a class="course-cta" onclick="document.getElementById('packages-section').classList.add('visible'); setTimeout(()=>document.getElementById('packages-section').scrollIntoView({behavior:'smooth'}), 50);">Giriş əldə et →</a>
+      </div>
+
+      <div class="course-item locked practical">
+        <div class="course-num">11</div>
+        <div class="course-info">
+          <div class="course-title">🔒 Dərs 11 — Bol zülallı çörək <span class="type-badge practical-badge">Praktiki</span></div>
+          <div class="course-desc">Zülal və liflə zəngin ev çörəyi hazırlamaq.</div>
+        </div>
+        <a class="course-cta" onclick="document.getElementById('packages-section').classList.add('visible'); setTimeout(()=>document.getElementById('packages-section').scrollIntoView({behavior:'smooth'}), 50);">Giriş əldə et →</a>
+      </div>
+
+      <div class="course-item locked theory">
+        <div class="course-num">12</div>
+        <div class="course-info">
+          <div class="course-title">🔒 Dərs 12 — Aralıqlı oruc <span class="type-badge theory-badge">Nəzəri</span></div>
+          <div class="course-desc">Kimlər üçün faydalı, kimlər üçün isə zərərli ola bilər?</div>
+        </div>
+        <a class="course-cta" onclick="document.getElementById('packages-section').classList.add('visible'); setTimeout(()=>document.getElementById('packages-section').scrollIntoView({behavior:'smooth'}), 50);">Giriş əldə et →</a>
+      </div>
+
+      <div class="course-item locked theory">
+        <div class="course-num">13</div>
+        <div class="course-info">
+          <div class="course-title">🔒 Dərs 13 — Strateji alış-veriş <span class="type-badge theory-badge">Nəzəri</span></div>
+          <div class="course-desc">Mətbəxinizi elə bir sistemə çevirin ki, istənilən yeməyi 10 dəqiqəyə yığasınız.</div>
+        </div>
+        <a class="course-cta" onclick="document.getElementById('packages-section').classList.add('visible'); setTimeout(()=>document.getElementById('packages-section').scrollIntoView({behavior:'smooth'}), 50);">Giriş əldə et →</a>
+      </div>
+
     </div>
   </div>
 
-  <!-- VIDEO -->
-  <div class="video-section" id="video-section">
+</div>
+
+<!-- VIDEO MODAL -->
+<div class="video-modal" id="video-modal" onclick="closeModalOutside(event)">
+  <div class="video-modal-inner">
+    <button class="modal-close" onclick="closeVideoModal()">✕</button>
     <div class="video-wrapper">
       <iframe id="lesson-iframe" allowfullscreen
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
         referrerpolicy="strict-origin-when-cross-origin">
       </iframe>
     </div>
-    <button class="watched-btn" onclick="showPackages()">✅ Dərsə baxdım — davam edin</button>
+    <div style="padding:16px 24px;background:var(--dark);">
+      <button class="watched-btn" style="margin-bottom:0;" onclick="watchedAndClose()">✅ Dərsə baxdım — davam edin</button>
+    </div>
   </div>
 </div>
 
@@ -621,32 +1069,47 @@
   <h2>Bütün dərslərə giriş əldə edin</h2>
 
   <div class="packages-grid">
-    <div class="pkg-card" onclick="selectPackage('1 aylıq giriş', 10, false, this)">
-      <div class="pkg-duration">1 ay</div>
+    <div class="pkg-card" onclick="selectPackage('Mini təlim', 10, false, this)">
+      <div class="pkg-name">Mini təlim</div>
+      <div class="pkg-duration">10 gün</div>
       <div class="pkg-price">10</div>
       <div class="pkg-currency">AZN</div>
+      <ul class="pkg-perks">
+        <li>✅ 13 dərs</li>
+        <li>✅ Tanışlıq üçün ideal</li>
+      </ul>
     </div>
 
-    <div class="pkg-card" onclick="selectPackage('3 aylıq giriş', 25, false, this)">
+    <div class="pkg-card" onclick="selectPackage('Tam təlim', 29, false, this)" style="position:relative;">
+      <div class="pkg-badge">⭐️ Ən populyar</div>
+      <div class="pkg-name">Tam təlim</div>
       <div class="pkg-duration">3 ay</div>
-      <div class="pkg-price">25</div>
+      <div class="pkg-price">29</div>
       <div class="pkg-currency">AZN</div>
+      <ul class="pkg-perks">
+        <li>✅ 13 əsas dərs</li>
+        <li>✅ Yay kolleksiyası (5 yeni dərs)</li>
+        <li>✅ Online vərdiş cədvəli</li>
+        <li>✅ Dərslərə yenidən qayıtmaq</li>
+      </ul>
     </div>
 
-    <div class="pkg-card premium" onclick="selectPackage('6 aylıq giriş', 45, true, this)">
-      <div class="pkg-badge">⭐️ Populyar</div>
+    <div class="pkg-card vip" onclick="selectPackage('VİP təlim', 100, true, this)">
+      <div class="pkg-badge vip-badge">🏆 VİP</div>
+      <div class="pkg-name">VİP təlim</div>
       <div class="pkg-duration">6 ay</div>
-      <div class="pkg-price">45</div>
+      <div class="pkg-price">100</div>
       <div class="pkg-currency">AZN</div>
-      <div class="pkg-feature">+ Yeni dərslər 🎁</div>
-    </div>
-
-    <div class="pkg-card premium" onclick="selectPackage('1 illik giriş', 60, true, this)">
-      <div class="pkg-badge">🏆 Ən yaxşı dəyər</div>
-      <div class="pkg-duration">1 il</div>
-      <div class="pkg-price">60</div>
-      <div class="pkg-currency">AZN</div>
-      <div class="pkg-feature">+ Yeni dərslər 🎁</div>
+      <ul class="pkg-perks">
+        <li>✅ 13 əsas dərs</li>
+        <li>✅ Yay kolleksiyası (5 yeni dərs)</li>
+        <li>✅ Online vərdiş cədvəli</li>
+      </ul>
+      <div class="vip-divider">+ Yalnız VİP üçün</div>
+      <ul class="vip-perks">
+        <li>👑 30 dəqiqəlik fərdi konsultasiya</li>
+        <li>👑 İdman və yuxu təlimlərinə 30% endirim</li>
+      </ul>
     </div>
   </div>
 </div>
@@ -720,24 +1183,34 @@
 
   let selectedLesson = null;
   let selectedPackage = null;
-  let lessonLocked = false;
 
   function selectLesson(key, card) {
-    if (lessonLocked) return;
-    lessonLocked = true;
-
-    // lock other cards
-    document.querySelectorAll('.lesson-card').forEach(c => {
-      if (c !== card) c.classList.add('locked');
-    });
+    document.querySelectorAll('.lesson-card').forEach(c => c.classList.remove('selected'));
     card.classList.add('selected');
     selectedLesson = key;
 
-    // show video
     document.getElementById('lesson-iframe').src = VIDEOS[key];
-    const vs = document.getElementById('video-section');
-    vs.classList.add('visible');
-    setTimeout(() => vs.scrollIntoView({ behavior: 'smooth', block: 'center' }), 100);
+    document.getElementById('video-modal').style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeVideoModal() {
+    document.getElementById('video-modal').style.display = 'none';
+    document.getElementById('lesson-iframe').src = '';
+    document.body.style.overflow = '';
+  }
+
+  function closeModalOutside(e) {
+    if (e.target === document.getElementById('video-modal')) closeVideoModal();
+  }
+
+  function watchedAndClose() {
+    closeVideoModal();
+    const cl = document.getElementById('course-list');
+    if (cl) cl.style.display = 'block';
+    const ps = document.getElementById('packages-section');
+    ps.classList.add('visible');
+    setTimeout(() => ps.scrollIntoView({ behavior: 'smooth', block: 'start' }), 300);
   }
 
   function showPackages() {
