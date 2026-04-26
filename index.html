@@ -71,7 +71,7 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: center top;
+    object-position: center 20%;
   }
 
   .ig-badge {
@@ -100,15 +100,22 @@
     .hero {
       flex-direction: column;
       text-align: center;
-      padding: 80px 24px 60px;
-      gap: 40px;
+      padding: 60px 24px 40px;
+      gap: 32px;
+      min-height: auto;
+    }
+    .hero-content {
+      max-width: 100%;
     }
     .hero-photo-wrap {
       width: 100%;
-      max-width: 380px;
+      max-width: 360px;
     }
     .hero-photo {
-      height: 340px;
+      height: 420px;
+    }
+    .scroll-hint {
+      display: none;
     }
   }
 
